@@ -217,8 +217,12 @@ class State:
                         consequent.pos = self.executor.instructions.index(target)
                         consequent_node = consequent.cfg
                         self.successors.append(consequent)
+                        self.status = Status.TERMINATED
                     else:
                         print('Could not find consequent branch of conditional')
+                        consequent_node = Node()
+                        consequent_node.add_statement('// unknown path')
+                        self.status = Status.ERRORED
 
                     alternate = self.clone()
                     self.successors.append(alternate)
@@ -226,8 +230,6 @@ class State:
                     test = f'{self.prepare_for_str_comparison(left)} != {self.prepare_for_str_comparison(right)}'
                     conditional = ConditionalNode(test, consequent_node, alternate.cfg)
                     self.cfg.next = conditional
-
-                    self.status = Status.TERMINATED
 
             case Mnemonic.RET:
                 self.status = Status.TERMINATED
