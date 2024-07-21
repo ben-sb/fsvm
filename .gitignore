@@ -1,4 +1,5 @@
 *.bndb
+vm-original
 input/*.json
 output/*-annotated.txt
 
