@@ -513,7 +513,7 @@
 0x5cf:	add                   reg5, reg5, reg5
 0x5d3:	add                   reg5, reg5, reg3
 0x5d7:	append                reg5, 1
-0x5d9:	if_neq_rel_jmp        reg5, reg6, reg7
+0x5d9:	jne                   reg5, reg6, reg7
 
 0x5da:	clear                 reg4
 0x5db:	append                reg4, 1

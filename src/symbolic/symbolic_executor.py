@@ -198,7 +198,7 @@ class State:
 
             # TODO: other jumps (not used)
 
-            case Mnemonic.IF_NEQ_REL_JMP:
+            case Mnemonic.JNE:
                 offset = self.regs[self.get_reg_id(instr.operands[0])]
                 left = self.regs[self.get_reg_id(instr.operands[1])]
                 right = self.regs[self.get_reg_id(instr.operands[2])]

@@ -1,10 +1,10 @@
 from enum import Enum
 
 class Mnemonic(Enum):
-    REL_JMP = 'rel_jmp'
-    IF_EQ_REL_JMP = 'if_eq_rel_jmp'
-    IF_NEQ_REL_JMP = 'if_neq_rel_jmp'
-    IF_LT_REL_JMP = 'if_lt_rel_jmp'
+    JMP = 'jmp'
+    JE = 'je'
+    JNE = 'jne'
+    JL = 'jl'
     CLEAR = 'clear'
     WRITE_LAST_CHAR_CODE = 'write_last_char_code'
     WRITE_CHAR = 'write_char'
@@ -19,7 +19,7 @@ class Mnemonic(Enum):
     RET = 'ret'
 
 # instructions that cause jumps/transfer control
-BRANCH_MNEMONICS = {Mnemonic.RET, Mnemonic.REL_JMP, Mnemonic.IF_EQ_REL_JMP, Mnemonic.IF_NEQ_REL_JMP, Mnemonic.IF_LT_REL_JMP}
+BRANCH_MNEMONICS = {Mnemonic.RET, Mnemonic.JMP, Mnemonic.JE, Mnemonic.JNE, Mnemonic.JL}
 
 class Reg(Enum):
     REG_0 = 'reg0'
@@ -85,7 +85,7 @@ class Disassembler:
                 # jumps to (pos + reg5)
                 case 40:
                     offset = Reg.REG_5
-                    self.instructions.append(Instr(addr, Mnemonic.REL_JMP, offset))
+                    self.instructions.append(Instr(addr, Mnemonic.JMP, offset))
 
                 # jumps to (pos + offset) if reg6 == reg7
                 case 41:
@@ -93,7 +93,7 @@ class Disassembler:
                     offset = Reg.REG_5
                     left = Reg.REG_6
                     right = Reg.REG_7
-                    self.instructions.append(Instr(addr, Mnemonic.IF_EQ_REL_JMP, offset, left, right))
+                    self.instructions.append(Instr(addr, Mnemonic.JE, offset, left, right))
 
                 # jumps to (pos + r5) if reg6 != reg7
                 case 42:
@@ -101,7 +101,7 @@ class Disassembler:
                     offset = Reg.REG_5
                     left = Reg.REG_6
                     right = Reg.REG_7
-                    self.instructions.append(Instr(addr, Mnemonic.IF_NEQ_REL_JMP, offset, left, right))
+                    self.instructions.append(Instr(addr, Mnemonic.JNE, offset, left, right))
 
                 # jumps to (pos + reg5) if reg6 < reg7
                 case 43:
@@ -109,7 +109,7 @@ class Disassembler:
                     left = Reg.REG_6
                     right = Reg.REG_7
                     offset = Reg.REG_5 # loaded only if less than condition is true
-                    self.instructions.append(Instr(addr, Mnemonic.IF_LT_REL_JMP, left, right, offset))
+                    self.instructions.append(Instr(addr, Mnemonic.JL, left, right, offset))
 
                 # clear reg
                 case 44 | 45 | 46 | 47 | 48| 49 | 50 | 51:
